@@ -1,0 +1,59 @@
+version: "3.8"
+services:
+  backend:
+    restart: always
+    build: .
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+      - storage
+    environment:
+      - MONGO_URI=mongodb://root:example@db:27017
+      - MINIO_ENDPOINT=192.168.178.30:9000 # use machine IP for local development
+      - MINIO_ACCESS_KEY=minio-root-user
+      - MINIO_SECRET_KEY=minio-root-password
+      - ALLOW_DELETE=DEBUG
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 500mb
+  db:
+    image: mongo
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=example
+    ports:
+      - 27017:27017
+    volumes:
+      - data:/data/db
+    
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 1gb
+  
+  storage:
+    image: minio/minio:latest
+    restart: always
+    command: server --console-address ":9001" /data
+    ports:
+      - 9000:9000
+      - 9001:9001
+    environment:
+      - MINIO_ROOT_USER=minio-root-user
+      - MINIO_ROOT_PASSWORD=minio-root-password
+    volumes:
+      - storage:/data
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 1gb
+  
+volumes:
+  data:
+  storage:
