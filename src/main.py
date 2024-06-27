@@ -39,10 +39,10 @@ def match_ad():
             profile =__user_data_service.get_user_data(user_id)
             if profile is None:
                 return make_response(jsonify({"error":"Profile not found"}),404)
-            ads = __ad_service.match_ad(profile,lang,ad_type)
+            ads = __ad_service.match_ad(profile,lang,ad_type)# O(n*m+1) Time complexity, O(n*m+1) Space complexity
             json_ads = []
-            for ad in ads:
-                json_ads.append(ad.toJson())
+            for ad in ads: # O(1) Time compexity, since the size is limited to 10 ads
+                json_ads.append(ad.toJson()) 
             if (len(ads) == 0):
                 return make_response(jsonify({"msg":"No ads found"}),404)
             return make_response(jsonify({"ads":json_ads}),200)

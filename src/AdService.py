@@ -20,14 +20,14 @@ class AdSerivce:
         self.db.create_ad(model)
         return ad_id
     
-    def match_ad(self,user_profile:UserAdProfileModel,lang:str,ad_type:int)-> List[AdModel.AdModel]:
+    def match_ad(self,user_profile:UserAdProfileModel,lang:str,ad_type:int)-> List[AdModel.AdModel]: # O(n*m+1) Time complexity, O(n*m+1) Space complexity 
         ads:List[AdModel.AdModel] = []
-        cursor = self.db.match_ad(user_profile,lang,ad_type)
+        cursor = self.db.match_ad(user_profile,lang,ad_type)# O(n*m) Time complexity, O(n*m) Space complexity
         if cursor is None:
             return ads
-        for ad in cursor:
-            ads.append(AdModel.AdModel.fromJson(json=ad))
-        return ads
+        for ad in cursor: # O(1) Time compexity, since the size is limited to 10 ads
+            ads.append(AdModel.AdModel.fromJson(json=ad)) # O(k) Time complexity O(1) Space complexity
+        return ads # O(1) Time complexity, O(1) Space complexity, since it's limited to 10 ads
 
     def del_ad(self,ad_id:str):
         self.db.remove_ad(ad_id)
