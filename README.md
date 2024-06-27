@@ -26,8 +26,7 @@ If you are done use:
 ## Tests
 
 1. Activate the python3 enviroment by running `source venv/bin/activate`
-2. Install `pytest`
-3. Run `pytest`
+2. Run `pytest`
 
 > Note: This project will be continued in the future
 
