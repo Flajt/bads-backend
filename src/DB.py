@@ -31,13 +31,13 @@ class DB:
         return AdModel.AdModel.fromJson(ad) # Time: O(k), Space O(1)
     
     def update_ad(self,ad_id:str,ad:AdModel.AdModel):
-        self.ads.update_one({"ad_id":ad_id},ad.toJson()) # Time: O(1) Space: O(k)
+        self.ads.update_one({"ad_id":ad_id},ad.toJson()) # Time: O(1) Space: O(1)
     
     def create_ad_profile(self,profile:UserAdProfileModel.UserAdProfileModel):
-        self.user_data.insert_one(profile.toJson()) # Time: O(1) Space: O(k)
+        self.user_data.insert_one(profile.toJson()) # Time: O(1) Space: O(1)
     
     def record_interaction(self,user_id:str, interaction:InteractionModel):
-        self.interacted_ads.update_one({"user_id":user_id},{"$push":{"interactions":interaction.toJson()}}) # Time: O(k) Space: O(k)
+        self.interacted_ads.update_one({"user_id":user_id},{"$push":{"interactions":interaction.toJson()}}) # Time: O(1) Space: O(1)
 
     def delete_ad_profile(self,profile:UserAdProfileModel.UserAdProfileModel):
         self.user_data.delete_one({"identifier":profile.user_id}) # Time: O(1)
@@ -46,7 +46,7 @@ class DB:
         profile = self.user_data.find_one({"identifier":user_id}) # Time: O(1) Space: O(1)
         if profile is None: # Time: O(1)
             return None # Time: O(1)
-        return UserAdProfileModel.UserAdProfileModel.fromJson(profile) # Time: O(k) Space: O(k)
+        return UserAdProfileModel.UserAdProfileModel.fromJson(profile) # Time: O(1) Space: O(1)
     
     def match_ad(self,profile:UserAdProfileModel.UserAdProfileModel,lang:str,ad_type:int):
       cursor = self.ads.aggregate([ # Time complexity total: O(n*m), space complexity total: O(n*m), output space complexity: O(1)
@@ -65,7 +65,7 @@ class DB:
         interaction = self.interacted_ads.find_one({"user_id":user_id}) # Time: O(1) Space: O(1)
         if interaction is None: # Time: O(1)
             return None # Time: O(1)
-        return InteractedAdsModel.InteractedAdsModel.fromJson(interaction) # Time: O(k) Space: O(k)
+        return InteractedAdsModel.InteractedAdsModel.fromJson(interaction) # Time: O(1) Space: O(1)
     
     def delete_ad_interactions(self,user_id:str):
         self.interacted_ads.delete_many({"user_id":user_id}) # Time: O(1)

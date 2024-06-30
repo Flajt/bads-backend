@@ -54,15 +54,15 @@ def match_ad():
 
 @app.route("/interacted-ads", methods=['GET',"POST","PUT"])
 def interacted_ads():
-    interacted_ads = []
     if request.method == 'GET':
+        interacted_ads = []
         ids_str = request.args.get("user_ids",type=str)
-        for user_id in ids_str.split(","):
-            merged_models = __interacted_ad_service.retrive_interactions(user_id)
+        for user_id in ids_str.split(","): # O(1), there are only three profiles
+            merged_models = __interacted_ad_service.retrive_interactions(user_id)# O(n) Time complexity, O(n) Space complexity
             if (merged_models is None):
                 continue
-            for merged_models in merged_models:
-                interacted_ads.append(merged_models.toJson())
+            for merged_models in merged_models: # Time complexity O(n)
+                interacted_ads.append(merged_models.toJson()) # Time complexity O(1)
             if (len(interacted_ads) == 0):
                 return make_response(jsonify({"msg":"No ads found"}),404)
             else:
@@ -82,7 +82,7 @@ def ad_Profile():
     try:
         json = request.json
         if request.method == 'POST':
-            for user_ad_profile in json["user_ad_profiles"]:
+            for user_ad_profile in json["user_ad_profiles"]: # O(1), there are only three profiles, for both space and time
                 __user_data_service.create_user_data(bloom_filter=user_ad_profile["bloom_filter"],user_id=user_ad_profile["identifier"],num_hash_functions=user_ad_profile["num_hash_func"])
             return "Created", 201
         return "Error",500

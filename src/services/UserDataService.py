@@ -10,6 +10,6 @@ class UserDataService:
     def get_user_data(self, user_id:str):
         return self.db.get_ad_profile(user_id)
     
-    def create_user_data(self,bloom_filter:List[int],user_id:str,num_hash_functions:int):
+    def create_user_data(self,bloom_filter:List[int],user_id:str,num_hash_functions:int):# O(1) Time complexity, O(1) Space complexity
         profile = UserAdProfileModel(bloom_filter=bloom_filter,identifier=user_id,hash_functions=num_hash_functions)
-        self.db.create_ad_profile(profile)
+        self.db.create_ad_profile(profile)# O(1) Time complexity, O(1) Space complexity
