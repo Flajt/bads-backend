@@ -37,3 +37,11 @@ If you are done use:
 - `src/tests`: Some tests to validate the core features, doesn't cover everything
 - `src/util`: Utility scripts e.g. to populate db or wipe it
 - `venv`: Virtual enviroment
+
+## Time complexity
+Below the scripts with their lines used for the time complexity estimate, should be examined backwards.
+
+- Uploading profiles: `main.py` ll. 80-90, `UserData.py` ll.13-15, `DB.py` ll. 36-37
+- Saving an interaction: `main.py`ll. 74-77, `InteractedAdService.py` ll. 35-36, `DB.py` ll. 39-40
+- Finding a matching ad: `main.py` ll. 31-52, `UserDataService.py` ll. 10-11, `DB.py`, ll.45-49, `AdService.py` ll.23-30, `DB.py` ll. 51-59
+- Fetching interactions: `main.py` ll. 46-59, `InteractedAdService.py` ll. 14-29, `DB.py` ll. 64-68, ll. 27-31
