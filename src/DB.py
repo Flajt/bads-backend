@@ -49,7 +49,7 @@ class DB:
         return UserAdProfileModel.UserAdProfileModel.fromJson(profile) # Time: O(1) Space: O(1)
     
     def match_ad(self,profile:UserAdProfileModel.UserAdProfileModel,lang:str,ad_type:int):
-      cursor = self.ads.aggregate([ # Time complexity total: O(n*m), space complexity total: O(n*m), output space complexity: O(1)
+      cursor = self.ads.aggregate([ # Time complexity total: O(n+m), space complexity: O(n+m) worst case, output space complexity: O(1)
           {'$match': {'lang': lang, 'ad_type': ad_type}}, # Time: O(n) Space: O(m)
           {'$addFields': {'matchingBits': {'$map': {'input': {'$zip': {'inputs': ['$bloom_filter', profile.bloom_filter]}}, 'as': 'pair', 'in': {'$bitAnd': [{'$arrayElemAt': ['$$pair', 0]}, {'$arrayElemAt': ['$$pair', 1]}]}}}}}, # Time: O(n*m). Space: O(n)
           {'$addFields': {'matchCount': {'$reduce': {'input': '$matchingBits','initialValue': 0,'in': {'$add': ['$$value', '$$this']}}}}}, # Time: O(n*m), Space O(n*m) (m = array size)
